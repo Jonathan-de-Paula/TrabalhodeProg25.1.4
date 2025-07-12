@@ -13,7 +13,7 @@ float distancia(float e, float f, float g, float h) {
     valorjvjv = valorjv * valorjv;
     valorsoma = valoriuiu + valorjvjv;
     valorf = sqrt(valorsoma);
-    //return sqrt((e - g) * (e - g) + (f - h) * (f - h));
+    //return sqrt((e - g) * (e - g) + (f - h) * (f - h)); //
     return valorf;
 }
 
