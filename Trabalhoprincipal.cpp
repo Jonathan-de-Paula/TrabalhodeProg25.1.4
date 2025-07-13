@@ -95,5 +95,5 @@ int elementossemluz( int m, int n, int G[m][n],int iluminacao[m][n])
    }
     return 0;
 }
-////proxima parte funções métricas!! fui dar uma descansada :) (leti)
+////proxima parte funções métricas!! fui dar uma descansada :) (leti!)
 
