@@ -19,7 +19,6 @@ int main(){
     int matrix[m][n];
     printf("Digite o valor do R: ");
     scanf("%f", &R);
-    printf("Digite os elementos da matriz:\n");
     fprintf(fp, "%d %d \n", m, n);
     fprintf(fp, "%.1f \n",R);
     for (int i = 0; i < m; i++) {
