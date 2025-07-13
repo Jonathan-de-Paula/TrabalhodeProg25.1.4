@@ -47,11 +47,13 @@ int main() {
 
     fclose(fp); /// Fechar leitura
 
-    /// Bendito algoritmo para colocar luminárias automaticamente. Dando uma resumida de leve essa parte é levemente mais complexa, tinha tentado por mim mesmo mas tive que apelar pro meu mano gpt. Basicamente essa parte do código vai pegar dados como o raio, local iluminado e area publica, realiza um loop que vai testando qual lugar a luminaria vai ser mais eficiente
+    /// Bendito algoritmo para colocar luminárias automaticamente. Dando uma resumida de leve essa parte é levemente
+    /// mais complexa, tinha tentado por mim mesmo mas tive que apelar pro meu mano gpt. Basicamente essa parte do código
+    /// vai pegar dados como o raio, local iluminado e area publica, realiza um loop que vai testando qual lugar a luminaria vai ser mais eficiente
     while (1) {
         int melhor_i = -1, melhor_j = -1, melhor_impacto = 0;
 
-        /// Varre todas as posições possíveis para colocar luminária
+        /// Analisa todas as posições possíveis para colocar luminária
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (G[i][j] == 0) continue; // Nada de poste no obstáculo
@@ -68,7 +70,7 @@ int main() {
                     }
                 }
 
-                /// Guarda a melhor posição até agora (maior impacto EVA reference???)
+                /// Guarda a melhor posição até agora (impacto? EVA reference???)
                 if (impacto > melhor_impacto) {
                     melhor_impacto = impacto;
                     melhor_i = i;
