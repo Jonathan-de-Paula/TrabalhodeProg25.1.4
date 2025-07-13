@@ -6,7 +6,10 @@
 int main() {
     int m, n;
     double R;
-    int luminum = 0, totlu = 0, totpub = 0, totil = 0;
+    int totlu = 0, totpub = 0, totil = 0;
+    /// Totlu: Contagem de luminárias ja existentes
+    /// Totil: Contagem células publicas iluminadas
+    /// Totpub: Contagem células publicas
 
     /// Abrindo nosso arquivinho
     FILE *fp = fopen("entrada.txt", "r");
@@ -15,53 +18,79 @@ int main() {
         return 1;
     }
 
-    /// Lendo m, n e raio
+    /// Lendo m, n e raio do arquivo entrada.txt
     fscanf(fp, "%d %d", &m, &n);
     fscanf(fp, "%lf", &R);
 
     int G[m][n], X[m][n], iluminado[m][n];
+    /// G: Matriz que indica os espaços públicos e os obstaculos
+    /// X: Matriz que indica se o espaço publico tem poste ou não
+    /// iluminado: Matriz que indica as celúlas iluminadas
 
     /// Leitura da matriz G e preenchimento da matriz X pelo usuário
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             fscanf(fp, "%d", &G[i][j]);
-
+            if (G[i][j] != 1 && G[i][j] != 0) {
+                printf("Matriz inválida");
+                /// Ver se o safado ta tentando nos enganar
+                return 1;
+            }
+            X[i][j] = 0;
             iluminado[i][j] = 0;
-
-            if (G[i][j] == 0) {
-                X[i][j] = 0;
-                printf("G[%d][%d] é 0 (obstáculo), portanto nada de luminárias.\n", i, j);
-            } else {
-                printf("Existe luminária na célula [%d][%d]? (1 = sim, 0 = não): ", i, j);
-                scanf("%d", &X[i][j]);
-
-                /// Validação
-                if (X[i][j] != 0 && X[i][j] != 1) {
-                    printf("⚠️ Valor inválido! Use 0 ou 1.\n");
-                    fclose(fp);
-                    return 1;
-                }
-                ///Contagem de luminárias ja existentes
-                if (X[i][j] == 1) {
-                    luminum++;
-                }
+            if (G[i][j] == 1) {
+                totpub++;
+                ///Adiciona +1 na contagem de areas publicas
             }
         }
     }
 
     fclose(fp); /// Fechar leitura
 
-    /// Marcar as células iluminadas com base nas luminárias e raio R
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            if (X[i][j] == 1) {
+    /// Bendito algoritmo para colocar luminárias automaticamente. Dando uma resumida de leve essa parte é levemente mais complexa, tinha tentado por mim mesmo mas tive que apelar pro meu mano gpt. Basicamente essa parte do código vai pegar dados como o raio, local iluminado e area publica, realiza um loop que vai testando qual lugar a luminaria vai ser mais eficiente
+    while (1) {
+        int melhor_i = -1, melhor_j = -1, melhor_impacto = 0;
+
+        /// Varre todas as posições possíveis para colocar luminária
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (G[i][j] == 0) continue; // Nada de poste no obstáculo
+
+                int impacto = 0;
+
+                /// Conta quantas células públicas essa posição iluminaria
                 for (int u = 0; u < m; u++) {
                     for (int v = 0; v < n; v++) {
                         double dist = sqrt((i - u) * (i - u) + (j - v) * (j - v));
-                        if (dist <= R) {
-                            iluminado[u][v] = 1;
+                        if (dist <= R && G[u][v] == 1 && iluminado[u][v] == 0) {
+                            impacto++;
                         }
                     }
+                }
+
+                /// Guarda a melhor posição até agora (maior impacto EVA reference???)
+                if (impacto > melhor_impacto) {
+                    melhor_impacto = impacto;
+                    melhor_i = i;
+                    melhor_j = j;
+                }
+            }
+        }
+
+        /// Se nenhuma posição pode ajudar mais, paramos
+        if (melhor_impacto == 0) break;
+
+        /// Instala uma luminária na melhor posição
+        X[melhor_i][melhor_j] = 1;
+        totlu++;
+
+        /// Marcar as células já iluminadas com base nas luminárias supracriadas (pai sabe palavras difíceis kkkk) e raio R
+        for (int u = 0; u < m; u++) {
+            for (int v = 0; v < n; v++) {
+                double dist = sqrt((melhor_i - u) * (melhor_i - u) + (melhor_j - v) * (melhor_j - v));
+                if (dist <= R && G[u][v] == 1 && iluminado[u][v] == 0) {
+                    iluminado[u][v] = 1;
+                    totil++;
                 }
             }
         }
@@ -78,19 +107,13 @@ int main() {
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             if (X[i][j] == 1) {
-                fprintf(saida, "L ");
-                totlu++;
+                fprintf(saida, "L "); /// Luminaria existindo só na resenha
             } else if (G[i][j] == 0) {
                 fprintf(saida, "0 ");
-            } else if (iluminado[i][j] == 1) {
+            } else if (iluminado[i][j] == 1) { /// Célula iluminada
                 fprintf(saida, "* ");
-                totil++;
             } else {
-                fprintf(saida, "1 "); // Pública não iluminada
-            }
-
-            if (G[i][j] == 1) {
-                totpub++;
+                fprintf(saida, "1 "); /// Pública não iluminada
             }
         }
         fprintf(saida, "\n");
@@ -99,8 +122,8 @@ int main() {
     fclose(saida); /// Fechar arquivo de saída
 
     /// Calcular métricas
-    float cobertura = (totpub > 0) ? (100.0 * totil / totpub) : 0;
-    float eficiencia = (totlu > 0) ? (1.0 * totil / totlu) : 0;
+    float cobertura = (totpub > 0) ? (100.0f * totil / totpub) : 0;
+    float eficiencia = (totlu > 0) ? ((float)totil / totlu) : 0;
 
     /// Exibir métricas no terminal
     printf("\n--- Resultados ---\n");
