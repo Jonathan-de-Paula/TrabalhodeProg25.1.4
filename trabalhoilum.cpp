@@ -3,7 +3,7 @@
 //
 #include <stdio.h>
 #include <math.h>
-
+// função para calcular a distância euclidiana
 double distance(int x1, int y1, int x2, int y2) {
     return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 }
@@ -11,12 +11,9 @@ double distance(int x1, int y1, int x2, int y2) {
     int main() {
         int m, n;
         double R;
-        int totlu = 0, totpub = 0, totil = 0;
-        /// Totlu: Contagem de luminárias ja existentes
-        /// Totil: Contagem células publicas iluminadas
-        /// Totpub: Contagem células publicas
+        int Contagem_luminárias_existentes = 0, Contagem_células_iluminadas = 0, Contagem_células = 0;
 
-        /// Abrindo nosso arquivinho
+        /// Abrindo nosso arquivo
         FILE *fp = fopen("entrada.txt", "r");
         if (fp == NULL) {
             printf("Erro ao abrir o arquivo!\n");
@@ -38,13 +35,13 @@ double distance(int x1, int y1, int x2, int y2) {
                 fscanf(fp, "%d", &G[i][j]);
                 if (G[i][j] != 1 && G[i][j] != 0) {
                     printf("Matriz inválida");
-                    /// Ver se o safado ta tentando nos enganar
+                    /// Ver se a matriz está incorreta
                     return 1;
                 }
                 X[i][j] = 0;
                 iluminado[i][j] = 0;
                 if (G[i][j] == 1) {
-                    totpub++;
+                    Contagem_células_iluminadas++;
                     ///Adiciona +1 na contagem de areas publicas
                 }
             }
@@ -52,9 +49,10 @@ double distance(int x1, int y1, int x2, int y2) {
 
         fclose(fp); /// Fechar leitura
 
-        /// Bendito algoritmo para colocar luminárias automaticamente. Dando uma resumida de leve essa parte é levemente
-        /// mais complexa,  Basicamente essa parte do código
-        /// vai pegar dados como o raio, local iluminado e area publica, realiza um loop que vai testando qual lugar a luminaria vai ser mais eficiente
+        /// algoritmo para colocar luminárias automaticamente:
+        /// essa parte pode ser complexa.
+        /// o código vai utilizar dados como o raio, local iluminado e area publica
+        /// e realizar um loop que vai testar qual lugar a luminaria vai ser mais eficiente
         while (1) {
             int melhor_i = -1, melhor_j = -1, melhor_impacto = 0;
 
@@ -75,7 +73,7 @@ double distance(int x1, int y1, int x2, int y2) {
                         }
                     }
 
-                    /// Guarda a melhor posição até agora (impacto? EVA reference???)
+                    /// Guarda a melhor posição até agora
                     if (impacto > melhor_impacto) {
                         melhor_impacto = impacto;
                         melhor_i = i;
@@ -84,20 +82,20 @@ double distance(int x1, int y1, int x2, int y2) {
                 }
             }
 
-            /// Se nenhuma posição pode ajudar mais, paramos
+            /// Se nenhuma posição pode nós ajudar mais, o loop é encerrado
             if (melhor_impacto == 0) break;
 
             /// Instala uma luminária na melhor posição
             X[melhor_i][melhor_j] = 1;
-            totlu++;
+            Contagem_luminárias_existentes++;
 
-            /// Marcar as células já iluminadas com base nas luminárias supracriadas (pai sabe palavras difíceis kkkk) e raio R
+            /// Marcar as células já iluminadas com base nas luminárias supracriadas e no raio R
             for (int u = 0; u < m; u++) {
                 for (int v = 0; v < n; v++) {
                     double dist = distance(melhor_i, melhor_j, u,v);
                     if (dist <= R && G[u][v] == 1 && iluminado[u][v] == 0) {
                         iluminado[u][v] = 1;
-                        totil++;
+                        Contagem_células++;
                     }
                 }
             }
@@ -114,7 +112,7 @@ double distance(int x1, int y1, int x2, int y2) {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (X[i][j] == 1) {
-                    fprintf(saida, "L "); /// Luminaria existindo só na resenha
+                    fprintf(saida, "L "); /// Luminaria existente
                 } else if (G[i][j] == 0) {
                     fprintf(saida, "0 ");
                 } else if (iluminado[i][j] == 1) { /// Célula iluminada
@@ -129,12 +127,13 @@ double distance(int x1, int y1, int x2, int y2) {
         fclose(saida); /// Fechar arquivo de saída
 
         /// Calcular métricas
-        float cobertura = (totpub > 0) ? (100.0f * totil / totpub) : 0;
-        float eficiencia = (totlu > 0) ? ((float)totil / totlu) : 0;
+        /// a sintaxe abaixo funciona semelhante a um IF seguido de um ELSE
+        float cobertura = (Contagem_células_iluminadas > 0) ? (100.0f * Contagem_células / Contagem_células_iluminadas) : 0;
+        float eficiencia = (Contagem_luminárias_existentes > 0) ? ((float)Contagem_células / Contagem_luminárias_existentes) : 0;
 
         /// Exibir métricas no terminal
         printf("\n--- Resultados ---\n");
-        printf("Total de luminarias instaladas: %d\n", totlu);
+        printf("Total de luminarias instaladas: %d\n", Contagem_luminárias_existentes);
         printf("Cobertura de areas publicas: %.0f%%\n", cobertura);
         printf("Eficiencia media: %.1f celulas publicas por luminaria\n", eficiencia);
         printf("Arquivo gerado: saida.txt\n");
