@@ -5,7 +5,7 @@
 #include <math.h>
 int main() {
     int m, n;
-    double R;
+    double radius;
     int totlu = 0, totpub = 0, totil = 0;
     /// Totlu: Contagem de luminárias ja existentes
     /// Totil: Contagem células publicas iluminadas
@@ -20,14 +20,16 @@ int main() {
 
     /// Lendo m, n e raio do arquivo entrada.txt
     fscanf(fp, "%d %d", &m, &n);
-    fscanf(fp, "%lf", &R);
+    fscanf(fp, "%lf", &radius);
+
+    int R = ceil(radius);
 
     int G[m][n], X[m][n], iluminado[m][n];
     /// G: Matriz que indica os espaços públicos e os obstaculos
     /// X: Matriz que indica se o espaço publico tem poste ou não
     /// iluminado: Matriz que indica as celúlas iluminadas
 
-    /// Leitura da matriz G e preenchimento da matriz X pelo usuário
+    /// Leitura da matriz G e preenchimento da matriz X
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             fscanf(fp, "%d", &G[i][j]);
@@ -48,7 +50,7 @@ int main() {
     fclose(fp); /// Fechar leitura
 
     /// Bendito algoritmo para colocar luminárias automaticamente. Dando uma resumida de leve essa parte é levemente
-    /// mais complexa, tinha tentado por mim mesmo mas tive que apelar pro meu mano gpt. Basicamente essa parte do código
+    /// mais complexa,  Basicamente essa parte do código
     /// vai pegar dados como o raio, local iluminado e area publica, realiza um loop que vai testando qual lugar a luminaria vai ser mais eficiente
     while (1) {
         int melhor_i = -1, melhor_j = -1, melhor_impacto = 0;
@@ -61,10 +63,10 @@ int main() {
                 int impacto = 0;
 
                 /// Conta quantas células públicas essa posição iluminaria
-                for (int u = 0; u < m; u++) {
-                    for (int v = 0; v < n; v++) {
+                for (int u = 0; u < m ; u++) {
+                    for (int v = 0; v < n ; v++) {
                         double dist = sqrt((i - u) * (i - u) + (j - v) * (j - v));
-                        if (dist <= R && G[u][v] == 1 && iluminado[u][v] == 0) {
+                        if ((dist <= R) && (G[u][v] == 1) && (iluminado[u][v] == 0)) {
                             impacto++;
                         }
                     }
@@ -129,9 +131,9 @@ int main() {
 
     /// Exibir métricas no terminal
     printf("\n--- Resultados ---\n");
-    printf("Total de luminárias instaladas: %d\n", totlu);
-    printf("Cobertura de áreas públicas: %.0f%%\n", cobertura);
-    printf("Eficiência média: %.1f células públicas por luminária\n", eficiencia);
+    printf("Total de luminarias instaladas: %d\n", totlu);
+    printf("Cobertura de areas publicas: %.0f%%\n", cobertura);
+    printf("Eficiencia media: %.1f celulas publicas por luminaria\n", eficiencia);
     printf("Arquivo gerado: saida.txt\n");
 
     return 0;
