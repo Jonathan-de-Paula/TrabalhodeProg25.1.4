@@ -8,7 +8,7 @@ int main(){
     int m, n;
     float R;
     FILE *fp;
-    fp = fopen("matrizeszes.txt", "w"); /// Abrir o arquivo para escrita
+    fp = fopen("entrada.txt", "w"); /// Abrir o arquivo para escrita
 
     if (fp == NULL) {
         printf("Error opening file");
