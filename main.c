@@ -156,9 +156,7 @@ int main() {
     /// Calcular métricas
     /// a sintaxe abaixo funciona semelhante a um IF seguido de um ELSE
     float cobertura = (Contagem_células_iluminadas > 0) ? (100.0f * Contagem_células_iluminadas / Contagem_células) : 0;
-    float eficiencia = (Contagem_luminárias_existentes > 0)
-                           ? ((float) Contagem_células_iluminadas / Contagem_luminárias_existentes)
-                           : 0;
+    float eficiencia = (Contagem_luminárias_existentes > 0)? ((float) Contagem_células_iluminadas / Contagem_luminárias_existentes): 0;
 
     /// Exibir métricas no terminal
     printf("\n--- Resultados ---\n");
