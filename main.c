@@ -20,9 +20,9 @@ int yesConfirm(char word[]) {
 }
 
 int main() {
-    int m, n, efficiencyMode;
+    int m, n, efficiencyMode = 0;
     double R;
-    int Contagem_luminárias_existentes = 0, Contagem_células_iluminadas = 0, Contagem_células = 0;
+    float Contagem_luminárias_existentes = 0.0f, Contagem_células_iluminadas = 0.0f, Contagem_células = 0.0f;
     char yesOrNo[BUFFER_SIZE];
 
     /// Abrindo nosso arquivo
@@ -32,7 +32,7 @@ int main() {
         return 1;
     }
 
-    /// Lendo m, n e raio do arquivo entrada.txt
+        /// Lendo m, n e raio do arquivo entrada.txt
     fscanf(fp, "%d %d", &m, &n);
     fscanf(fp, "%lf", &R);
 
@@ -158,7 +158,7 @@ int main() {
 
     /// Exibir métricas no terminal
     printf("\n--- Resultados ---\n");
-    printf("Total de luminarias instaladas: %d\n", Contagem_luminárias_existentes);
+    printf("Total de luminarias instaladas: %.1f\n", Contagem_luminárias_existentes);
     printf("Cobertura de areas publicas: %.0f%%\n", cobertura);
     printf("Eficiencia media: %.1f celulas publicas por luminaria\n", eficiencia);
     printf("Arquivo gerado: saida.txt\n");
