@@ -39,14 +39,12 @@ int main() {
     printf("Deseja que o posicionamento priorize eficiencia a totalidade? (S/N)\n> ");
     fgets(yesOrNo, BUFFER_SIZE, stdin);
     yesOrNo[strcspn(yesOrNo, "\n")] = '\0'; // remove '\n' do final
-    efficiencyMode = yesConfirm(yesOrNo);
-    // Remove o '\n' do final
+    efficiencyMode = yesConfirm(yesOrNo); //define o effiencymode como ligado ou desligado;
 
     int G[m][n], X[m][n], iluminado[m][n];
     /// G: Matriz que indica os espaços públicos e os obstaculos
-    /// X: Matriz que indica se o espaço publico tem poste ou não
+    /// X: Matriz que indica se o espaço publico tem luminária ou não
     /// iluminado: Matriz que indica as celúlas iluminadas
-
     /// Leitura da matriz G e preenchimento da matriz X
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
