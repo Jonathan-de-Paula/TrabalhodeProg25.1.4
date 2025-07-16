@@ -59,7 +59,7 @@ int main() {
             X[i][j] = 0;
             iluminado[i][j] = 0;
             if (G[i][j] == 1) {
-                Contagem_células_iluminadas++;
+                Contagem_células++;
                 ///Adiciona +1 na contagem de areas publicas
             }
         }
@@ -121,7 +121,7 @@ int main() {
                 double dist = distance(melhor_i, melhor_j, u, v);
                 if (dist <= R && G[u][v] == 1 && iluminado[u][v] == 0) {
                     iluminado[u][v] = 1;
-                    Contagem_células++;
+                    Contagem_células_iluminadas++;
                 }
             }
         }
@@ -155,9 +155,9 @@ int main() {
 
     /// Calcular métricas
     /// a sintaxe abaixo funciona semelhante a um IF seguido de um ELSE
-    float cobertura = (Contagem_células_iluminadas > 0) ? (100.0f * Contagem_células / Contagem_células_iluminadas) : 0;
+    float cobertura = (Contagem_células_iluminadas > 0) ? (100.0f * Contagem_células_iluminadas / Contagem_células) : 0;
     float eficiencia = (Contagem_luminárias_existentes > 0)
-                           ? ((float) Contagem_células / Contagem_luminárias_existentes)
+                           ? ((float) Contagem_células_iluminadas / Contagem_luminárias_existentes)
                            : 0;
 
     /// Exibir métricas no terminal
