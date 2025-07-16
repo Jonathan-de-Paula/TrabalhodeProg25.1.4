@@ -9,7 +9,7 @@
 double distance(int x1, int y1, int x2, int y2) {
     return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 }
-
+//garantir que a resposta do usuário é aceita pelo programa
 int yesConfirm(char word[]) {
     if ((strcmp(word, "sim") == 0) || (strcmp(word, "SIM") == 0) || (strcmp(word, "Sim") == 0) || (
             strcmp(word, "S") == 0) || (strcmp(word, "s") == 0)) {
